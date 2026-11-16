@@ -1,0 +1,12 @@
+project: savantenvs/solidity
+target: solfuzzer_standard_json
+cmds:
+  - cmd: /mayhem/build-fuzz/test/tools/solfuzzer --quiet --standard-json
+    afl: true
+    # upstream's AFL harness (test/tools/afl_fuzzer.cpp): stdin is a Standard JSON request (languages
+    # Solidity, Yul, SolidityAST, EVMAssembly); an internal compiler error in the reply aborts.
+    # one exec is a whole compiler run under ASan+UBSan; leave room for slow hosts
+    timeout: 20
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/solfuzzer_standard_json/testsuite

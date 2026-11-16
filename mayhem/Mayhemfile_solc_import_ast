@@ -1,0 +1,11 @@
+project: savantenvs/solidity
+target: solc_import_ast
+cmds:
+  - cmd: /mayhem/build-fuzz/solc/solc --experimental --import-ast @@ --bin
+    afl: true
+    # Solidity AST JSON import (ASTJsonImporter), then analysis and code generation
+    # one exec is a whole compiler run under ASan+UBSan; leave room for slow hosts
+    timeout: 20
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/solc_import_ast/testsuite
