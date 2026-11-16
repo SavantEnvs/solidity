@@ -1,0 +1,14 @@
+project: savantenvs/solidity
+target: solc
+cmds:
+  - cmd: /mayhem/build-fuzz/solc/solc --optimize --bin --asm @@
+    afl: true
+    # the command-line compiler on a Solidity source file: legacy code generator, optimizer on
+    # (solfuzzer's own source mode wraps the input in a JSON request and aborts in its own JSON
+    # serializer on any non-UTF-8 byte, so Solidity source is fuzzed through solc instead)
+    # one exec is a whole compiler run under ASan+UBSan; leave room for slow hosts
+    timeout: 20
+    dictionary: /mayhem/mayhem/solidity.dict
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/solc/testsuite

@@ -1,0 +1,12 @@
+project: savantenvs/solidity
+target: solc_via_ir
+cmds:
+  - cmd: /mayhem/build-fuzz/solc/solc --via-ir --optimize --bin @@
+    afl: true
+    # the command-line compiler on a Solidity source file, through the IR (Yul) pipeline
+    # one exec is a whole compiler run under ASan+UBSan; leave room for slow hosts
+    timeout: 20
+    dictionary: /mayhem/mayhem/solidity.dict
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/solc_via_ir/testsuite

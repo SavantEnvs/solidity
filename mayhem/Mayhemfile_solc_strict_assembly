@@ -1,0 +1,12 @@
+project: savantenvs/solidity
+target: solc_strict_assembly
+cmds:
+  - cmd: /mayhem/build-fuzz/solc/solc --strict-assembly --optimize --bin @@
+    afl: true
+    # Yul / strict assembly: parse, analyse, optimise and assemble an object
+    # one exec is a whole compiler run under ASan+UBSan; leave room for slow hosts
+    timeout: 20
+    dictionary: /mayhem/mayhem/strict_assembly.dict
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/solc_strict_assembly/testsuite

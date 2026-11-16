@@ -1,0 +1,11 @@
+project: savantenvs/solidity
+target: solfuzzer_const_opt
+cmds:
+  - cmd: /mayhem/build-fuzz/test/tools/solfuzzer --quiet --const-opt
+    afl: true
+    # upstream's AFL harness driving the constant optimizer: stdin is a string of 32-byte words
+    # one exec is a whole compiler run under ASan+UBSan; leave room for slow hosts
+    timeout: 20
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/solfuzzer_const_opt/testsuite
